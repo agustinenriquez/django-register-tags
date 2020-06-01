@@ -1,4 +1,4 @@
-# django-register-tags README
+# Django Register Tags VSCODE Extension README
 
 This is the README for your extension "django-register-tags". After writing up a brief description, we recommend including the following sections.
 
