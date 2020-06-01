@@ -3,6 +3,10 @@
 	"displayName": "django register tags",
 	"publisher": "tocotoco",
 	"description": "register admin models easily",
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/m0tz/django-register-tags.git"
+	},
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.45.0"
