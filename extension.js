@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
-
+const path = require("path");
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
@@ -23,21 +23,27 @@ function activate(context) {
 		var editor = vscode.window.activeTextEditor;
 		var selection = editor.selection;
 		var word = editor.document.getText(selection);
-		if (word) {
-			var lineCount = editor.document.lineCount;
-			var position = new vscode.Position(lineCount, 0)
-			const lines = `\n\n`
-			const decorator = `@admin.register(${word})\n`;
-			const classSign = `class ${word}Admin(forms.ModelForm):\n`;
-			const metaClass = `    class Meta:\n`;
-			const modelWord = `        model = ${word}\n`;
-			const fields = `        fields = '__all__'\n`;
-			const boilerPlate = lines + decorator + classSign + metaClass + modelWord + fields
-			// Add validation for model names (ie: first letter must be capitalized.)
-			editor.edit(editBuilder => {
-				editBuilder.insert(position, boilerPlate)
-			});
+		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
+		currentFilePath = currentFilePath.split('/') 
+		var isAdminFile = currentFilePath[currentFilePath.length-1]
+		if (isAdminFile == "admin.py") {
+			if (word) {
+				var lineCount = editor.document.lineCount;
+				var position = new vscode.Position(lineCount, 0)
+				const lines = `\n\n`
+				const decorator = `@admin.register(${word})\n`;
+				const classSign = `class ${word}Admin(forms.ModelForm):\n`;
+				const metaClass = `    class Meta:\n`;
+				const modelWord = `        model = ${word}\n`;
+				const fields = `        fields = '__all__'\n`;
+				const boilerPlate = lines + decorator + classSign + metaClass + modelWord + fields
+				// Add validation for model names (ie: first letter must be capitalized.)
+				editor.edit(editBuilder => {
+					editBuilder.insert(position, boilerPlate)
+				});
+			}
 		}
+
 		vscode.window.showInformationMessage(boilerPlate);
 	});
 
