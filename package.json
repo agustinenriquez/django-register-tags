@@ -1,7 +1,8 @@
 {
 	"name": "django-register-tags",
 	"displayName": "django register tags",
-	"description": "",
+	"publisher": "tocotoco",
+	"description": "register admin models easily",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.45.0"
