@@ -15,7 +15,8 @@
 		"Formatters"
 	],
 	"activationEvents": [
-		"onCommand:django-register-tags.registerModel"
+		"onCommand:django-register-tags.registerModel",
+		"onCommand:django-register-tags.registerModels"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -23,13 +24,23 @@
 			{
 				"command": "django-register-tags.registerModel",
 				"title": "Register Model"
+			},
+			{
+				"command": "django-register-tags.registerModels",
+				"title": "Register Models"
 			}
 		],
 		"menus": {
-			"editor/context": [{
-				"command": "django-register-tags.registerModel",
-				"group": "navigation"	
-			}]
+			"editor/context": [
+				{
+					"command": "django-register-tags.registerModel",
+					"group": "navigation"	
+				},
+				{
+					"command": "django-register-tags.registerModels",
+					"group": "navigation"	
+				}
+			]
 		}
 	},
 	"scripts": {

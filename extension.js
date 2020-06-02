@@ -18,7 +18,40 @@ function activate(context) {
 	// Now provide the implementation of the command with  registerCommand
 	// The commandId parameter must match the command field in package.json
 
+	let boilerPlate = function(word) {
+		const lines = `\n\n`
+		const decorator = `@admin.register(${word})\n`;
+		const classSign = `class ${word}Admin(admin.ModelAdmin):${lines}`;
+		const metaClass = `    class Meta:\n`;
+		const modelWord = `        model = ${word}\n`;
+		const fields = `        fields = '__all__'\n`;
+		const boilerPlate = lines + decorator + classSign + metaClass + modelWord + fields
+		return boilerPlate
+	}
+
 	let registerModel = vscode.commands.registerCommand('django-register-tags.registerModel', function () {
+		// The code you place here will be executed every time your command is executed
+		var editor = vscode.window.activeTextEditor;
+		var selection = editor.selection;
+		var word = editor.document.getText(selection);
+		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
+		currentFilePath = currentFilePath.split('/') 
+		var isAdminFile = currentFilePath[currentFilePath.length-1]
+		if (isAdminFile == "admin.py") {
+			if (word) {
+				// Add validation for model names (ie: first letter must be capitalized.)
+				var lineCount = editor.document.lineCount;
+				var position = new vscode.Position(lineCount, 0)
+				editor.edit(editBuilder => {
+					editBuilder.insert(position, boilerPlate(word))
+				});
+			}
+		}
+
+		vscode.window.showInformationMessage(boilerPlate);
+	});
+
+	let registerModels = vscode.commands.registerCommand('django-register-tags.registerModels', function () {
 		// The code you place here will be executed every time your command is executed
 		var editor = vscode.window.activeTextEditor;
 		var selection = editor.selection;
@@ -30,16 +63,8 @@ function activate(context) {
 			if (word) {
 				var lineCount = editor.document.lineCount;
 				var position = new vscode.Position(lineCount, 0)
-				const lines = `\n\n`
-				const decorator = `@admin.register(${word})\n`;
-				const classSign = `class ${word}Admin(admin.ModelAdmin):${lines}`;
-				const metaClass = `    class Meta:\n`;
-				const modelWord = `        model = ${word}\n`;
-				const fields = `        fields = '__all__'\n`;
-				const boilerPlate = lines + decorator + classSign + metaClass + modelWord + fields
-				// Add validation for model names (ie: first letter must be capitalized.)
 				editor.edit(editBuilder => {
-					editBuilder.insert(position, boilerPlate)
+					editBuilder.insert(position, boilerPlate(word))
 				});
 			}
 		}
@@ -47,7 +72,7 @@ function activate(context) {
 		vscode.window.showInformationMessage(boilerPlate);
 	});
 
-	context.subscriptions.push(registerModel);
+	context.subscriptions.push(registerModels);
 
 }
 exports.activate = activate;
