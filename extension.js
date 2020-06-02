@@ -54,21 +54,31 @@ function activate(context) {
 	let registerModels = vscode.commands.registerCommand('django-register-tags.registerModels', function () {
 		// The code you place here will be executed every time your command is executed
 		var editor = vscode.window.activeTextEditor;
-		var selection = editor.selection;
-		var word = editor.document.getText(selection);
+		var fileText = editor.document.getText();
 		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
 		currentFilePath = currentFilePath.split('/') 
 		var isAdminFile = currentFilePath[currentFilePath.length-1]
+		var codeToInject = "";
+		var modelString
 		if (isAdminFile == "admin.py") {
-			if (word) {
-				var lineCount = editor.document.lineCount;
-				var position = new vscode.Position(lineCount, 0)
-				editor.edit(editBuilder => {
-					editBuilder.insert(position, boilerPlate(word))
+			if (fileText.indexOf('from .models import') > 0) {
+				fileText.splitLines().forEach((e) => {
+					if (e.indexOf('.models') > 0) {
+						var indexOfImport = e.indexOf('import') + 7;
+						modelString = e.substring(indexOfImport, e.length);
+						modelString = modelString.replace(/,+/g, '').split(' ');
+						modelString.forEach((model) => {
+							codeToInject += boilerPlate(model)
+						});
+						var lineCount = editor.document.lineCount;
+						var position = new vscode.Position(lineCount, 0)
+						editor.edit(editBuilder => {
+							editBuilder.insert(position, codeToInject)
+						});
+					};
 				});
 			}
 		}
-
 		vscode.window.showInformationMessage(boilerPlate);
 	});
 
