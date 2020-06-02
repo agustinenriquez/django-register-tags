@@ -32,7 +32,7 @@ function activate(context) {
 				var position = new vscode.Position(lineCount, 0)
 				const lines = `\n\n`
 				const decorator = `@admin.register(${word})\n`;
-				const classSign = `class ${word}Admin(forms.ModelForm):\n`;
+				const classSign = `class ${word}Admin(admin.ModelAdmin):\n`;
 				const metaClass = `    class Meta:\n`;
 				const modelWord = `        model = ${word}\n`;
 				const fields = `        fields = '__all__'\n`;
