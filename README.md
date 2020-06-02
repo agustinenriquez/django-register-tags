@@ -2,7 +2,7 @@
 
 This a Visual Studio Code Extension. 
 
-Create a boilerplate for the selected text.
+Create a boilerplate from selected model.
 
 ## Usage
 
