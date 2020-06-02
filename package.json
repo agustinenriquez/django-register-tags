@@ -1,13 +1,13 @@
 {
 	"name": "django-register-tags",
 	"displayName": "django register tags",
-	"publisher": "tocotoco",
+	"publisher": "agus",
 	"description": "register admin models easily",
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/m0tz/django-register-tags.git"
 	},
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"engines": {
 		"vscode": "^1.45.0"
 	},
