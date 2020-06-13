@@ -81,8 +81,20 @@ class ${word}Admin(admin.ModelAdmin):
 		var fileText = editor.document.getText();
 		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
 		var modelsFilePath = currentFilePath.replace('admin', 'models');
+		var className = null;
+		let classProps = {};
 		var openPath = vscode.Uri.file(modelsFilePath);
 		vscode.workspace.openTextDocument(openPath).then(text => {
+			let textString = text.getText();
+			let splittedText = textString.splitLines();
+			splittedText.forEach((line)=>{
+				if (line.indexOf('class') >= 0) {
+					className = line.split(' ')[1].split('(')[0];
+					classProps[className] = [];
+				} else if (line.indexOf('=') > 0) {
+					classProps[className].unshift(line.split('=')[0].replace(/\s/g,''));
+				}
+			});
 			vscode.window.showTextDocument(text);
 		  });
 	});
