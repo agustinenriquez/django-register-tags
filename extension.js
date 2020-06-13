@@ -1,23 +1,11 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
-const path = require("path");
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
 
 /**
  * @param {vscode.ExtensionContext} context
  */
+
 function activate(context) {
-
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "django-register-tags" is now active!');
-
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with  registerCommand
-	// The commandId parameter must match the command field in package.json
-
 	let boilerPlate = function(word) {
 		// i know this looks awful but it seems to be the way VSCODE recognizes
 		// the position to inject the string.
@@ -31,7 +19,6 @@ class ${word}Admin(admin.ModelAdmin):
 }
 
 	let registerModel = vscode.commands.registerCommand('django-register-tags.registerModel', function () {
-		// The code you place here will be executed every time your command is executed
 		var editor = vscode.window.activeTextEditor;
 		var selection = editor.selection;
 		var word = editor.document.getText(selection);
@@ -46,14 +33,13 @@ class ${word}Admin(admin.ModelAdmin):
 				editor.edit(editBuilder => {
 					editBuilder.insert(position, boilerPlate(word))
 				});
-			}
-		}
+			};
+		};
 
 		vscode.window.showInformationMessage(boilerPlate);
 	});
 
 	let registerModels = vscode.commands.registerCommand('django-register-tags.registerModels', function () {
-		// The code you place here will be executed every time your command is executed
 		var editor = vscode.window.activeTextEditor;
 		var fileText = editor.document.getText();
 		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
@@ -85,10 +71,20 @@ class ${word}Admin(admin.ModelAdmin):
 
 	context.subscriptions.push(registerModels);
 
+	let registerModelByField = vscode.commands.registerCommand('django-register-tags.registerModelByField', function () {
+		var editor = vscode.window.activeTextEditor;
+		var fileText = editor.document.getText();
+		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
+		var modelsFilePath = currentFilePath.replace('admin', 'models');
+		var openPath = vscode.Uri.file(modelsFilePath);
+		vscode.workspace.openTextDocument(openPath).then(text => {
+			vscode.window.showTextDocument(text);
+		  });
+	});
+
 }
 exports.activate = activate;
 
-// this method is called when your extension is deactivated
 function deactivate() {}
 
 module.exports = {

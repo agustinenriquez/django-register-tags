@@ -5,7 +5,7 @@
 	"description": "register admin models easily",
 	"repository": {
 		"type": "git",
-		"url": "git://github.com/m0tz/django-register-tags.git"
+		"url": "https://www.github.com/m0tz/django-register-tags.git"
 	},
 	"version": "0.0.3",
 	"engines": {
@@ -16,7 +16,8 @@
 	],
 	"activationEvents": [
 		"onCommand:django-register-tags.registerModel",
-		"onCommand:django-register-tags.registerModels"
+		"onCommand:django-register-tags.registerModels",
+		"onCommand:django-register-tags.registerModelByField"
 	],
 	"main": "./extension.js",
 	"contributes": {
@@ -28,6 +29,10 @@
 			{
 				"command": "django-register-tags.registerModels",
 				"title": "Register Models"
+			},
+			{
+				"command": "django-register-tags.registerModelByField",
+				"title": "Register Model Fields "
 			}
 		],
 		"menus": {
@@ -38,6 +43,10 @@
 				},
 				{
 					"command": "django-register-tags.registerModels",
+					"group": "navigation"	
+				},
+				{
+					"command": "django-register-tags.registerModelByField",
 					"group": "navigation"	
 				}
 			]
