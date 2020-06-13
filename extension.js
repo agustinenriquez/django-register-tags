@@ -19,15 +19,16 @@ function activate(context) {
 	// The commandId parameter must match the command field in package.json
 
 	let boilerPlate = function(word) {
-		const lines = `\n\n`
-		const decorator = `@admin.register(${word})\n`;
-		const classSign = `class ${word}Admin(admin.ModelAdmin):${lines}`;
-		const metaClass = `    class Meta:\n`;
-		const modelWord = `        model = ${word}\n`;
-		const fields = `        fields = '__all__'\n`;
-		const boilerPlate = lines + decorator + classSign + metaClass + modelWord + fields
-		return boilerPlate
-	}
+		// i know this looks awful but it seems to be the way VSCODE recognizes
+		// the position to inject the string.
+		return `
+
+@admin.register(${word})
+class ${word}Admin(admin.ModelAdmin):
+	class Meta:
+	    model = ${word}
+	    fields = '__all__'\n`;
+}
 
 	let registerModel = vscode.commands.registerCommand('django-register-tags.registerModel', function () {
 		// The code you place here will be executed every time your command is executed
