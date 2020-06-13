@@ -18,14 +18,22 @@ class ${word}Admin(admin.ModelAdmin):
 	    fields = '__all__'\n`;
 }
 
+	let isAdminFile = function() {
+		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
+		currentFilePath = currentFilePath.split('/') 
+		currentFilePath = currentFilePath[currentFilePath.length-1]
+		if (currentFilePath == "admin.py") return true
+	}
+
+	let hasModelsImports = function(afileText) {
+		if (afileText.indexOf('from .models import') > 0) return true
+	}
+
 	let registerModel = vscode.commands.registerCommand('django-register-tags.registerModel', function () {
 		var editor = vscode.window.activeTextEditor;
 		var selection = editor.selection;
 		var word = editor.document.getText(selection);
-		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
-		currentFilePath = currentFilePath.split('/') 
-		var isAdminFile = currentFilePath[currentFilePath.length-1]
-		if (isAdminFile == "admin.py") {
+		if (isAdminFile()) {
 			if (word) {
 				// Add validation for model names (ie: first letter must be capitalized.)
 				var lineCount = editor.document.lineCount;
@@ -42,13 +50,10 @@ class ${word}Admin(admin.ModelAdmin):
 	let registerModels = vscode.commands.registerCommand('django-register-tags.registerModels', function () {
 		var editor = vscode.window.activeTextEditor;
 		var fileText = editor.document.getText();
-		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
-		currentFilePath = currentFilePath.split('/') 
-		var isAdminFile = currentFilePath[currentFilePath.length-1]
 		var codeToInject = "";
-		var modelString
-		if (isAdminFile == "admin.py") {
-			if (fileText.indexOf('from .models import') > 0) {
+		var modelString = "";
+		if (isAdminFile()) {
+			if (hasModelsImports(fileText)) {
 				fileText.splitLines().forEach((e) => {
 					if (e.indexOf('.models') > 0) {
 						var indexOfImport = e.indexOf('import') + 7;
