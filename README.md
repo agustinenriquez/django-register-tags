@@ -1,7 +1,5 @@
 # Django Register Tags
 
-This a Visual Studio Code Extension. 
-
 Create a boilerplate from selected model.
 
 ## Usage
