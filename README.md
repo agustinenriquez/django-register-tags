@@ -14,6 +14,11 @@ Register all models:
 
 ![alt text](https://github.com/m0tz/django-register-tags/blob/master/addallmodelsconcept.gif?raw=true)
 
+Register all fields inside a list_display property:
+
+![alt text](https://github.com/m0tz/django-register-tags/blob/master/create_display_list_from_model.gif?raw=true)
+
+
 ## Reporting
 
 Please feel free to report any issues or features.
