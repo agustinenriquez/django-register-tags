@@ -18,6 +18,25 @@ class ${word}Admin(admin.ModelAdmin):
 	    fields = '__all__'\n`;
 }
 
+	let modelsBoilerPlate = function(className) {
+		return `
+
+@admin.register(${className})
+class ${className}Admin(admin.ModelAdmin):
+	class Meta:
+		model = ${className}
+		`;
+	}
+
+	let listDisplay = function(name, fields) {
+		return `
+
+@admin.register(${name})
+class ${name}Admin(admin.ModelAdmin):
+	list_display = ("${fields}")\n
+`;
+	}
+
 	let isAdminFile = function() {
 		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
 		currentFilePath = currentFilePath.split('/') 
@@ -81,22 +100,42 @@ class ${word}Admin(admin.ModelAdmin):
 		var fileText = editor.document.getText();
 		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
 		var modelsFilePath = currentFilePath.replace('admin', 'models');
+		var selectedClassName = editor.document.getText(editor.selection);
 		var className = null;
 		let classProps = {};
+		let properties = []
 		var openPath = vscode.Uri.file(modelsFilePath);
 		vscode.workspace.openTextDocument(openPath).then(text => {
 			let textString = text.getText();
 			let splittedText = textString.splitLines();
+			let hasClass = false;
 			splittedText.forEach((line)=>{
-				if (line.indexOf('class') >= 0) {
+				if (hasClass && line.indexOf('class') >=0) {
+					hasClass = false;
+				}
+				if (!hasClass && line.indexOf('class') >= 0) {
 					className = line.split(' ')[1].split('(')[0];
-					classProps[className] = [];
-				} else if (line.indexOf('=') > 0) {
-					classProps[className].unshift(line.split('=')[0].replace(/\s/g,''));
+					if (className == selectedClassName) {
+						classProps[className] = [];
+						hasClass = true;
+						modelsBoilerPlate(className)
+					}
+				}
+				if (hasClass && line.indexOf('=') > 0 && className == selectedClassName) {
+					let property = line.split('=')[0].replace(/\s/g,'')
+					classProps[className].unshift(property);
+					properties.unshift(property);
 				}
 			});
-			vscode.window.showTextDocument(text);
-		  });
+			let codeToInject = listDisplay(selectedClassName, properties.toString().split(',').join('", "'));
+			var lineCount = editor.document.lineCount;
+			var position = new vscode.Position(lineCount, 0)
+			editor.edit(editBuilder => {
+				editBuilder.insert(position, codeToInject)
+			});
+		});
+		vscode.window.showTextDocument(text);
+		
 	});
 
 }
