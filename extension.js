@@ -33,8 +33,7 @@ class ${className}Admin(admin.ModelAdmin):
 
 @admin.register(${name})
 class ${name}Admin(admin.ModelAdmin):
-	list_display = ("${fields}")\n
-`;
+	list_display = ("${fields}")\n`;
 	}
 
 	let isAdminFile = function() {
