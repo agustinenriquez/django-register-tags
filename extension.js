@@ -97,7 +97,6 @@ class ${name}Admin(admin.ModelAdmin):
 
 	let registerModelByField = vscode.commands.registerCommand('django-register-tags.registerModelByField', function () {
 		var editor = vscode.window.activeTextEditor;
-		var fileText = editor.document.getText();
 		var currentFilePath = vscode.window.activeTextEditor.document.fileName;
 		var modelsFilePath = currentFilePath.replace('admin', 'models');
 		var selectedClassName = editor.document.getText(editor.selection);
