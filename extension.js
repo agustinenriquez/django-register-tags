@@ -108,21 +108,23 @@ class ${name}Admin(admin.ModelAdmin):
             let splittedText = textString.splitLines();
             let hasClass = false;
             splittedText.forEach((line)=>{
-                if (hasClass && line.indexOf('class') >=0) {
-                    hasClass = false;
-                }
-                if (!hasClass && line.indexOf('class') >= 0) {
-                    className = line.split(' ')[1].split('(')[0];
-                    if (className == selectedClassName) {
-                        classProps[className] = [];
-                        hasClass = true;
-                        modelsBoilerPlate(className)
+                if (!(line.indexOf('def') == 0) && line.indexOf('return') == -1) {
+                    if (hasClass && line.indexOf('class') >=0) {
+                        hasClass = false;
                     }
-                }
-                if (hasClass && line.indexOf('=') > 0 && className == selectedClassName) {
-                    let property = line.split('=')[0].replace(/\s/g,'')
-                    classProps[className].unshift(property);
-                    properties.unshift(property);
+                    if (!hasClass && line.indexOf('class') >= 0) {
+                        className = line.split(' ')[1].split('(')[0];
+                        if (className == selectedClassName) {
+                            classProps[className] = [];
+                            hasClass = true;
+                            modelsBoilerPlate(className)
+                        }
+                    }
+                    if (hasClass && line.indexOf('=') > 0 && className == selectedClassName) {
+                        let property = line.split('=')[0].replace(/\s/g,'')
+                        classProps[className].unshift(property);
+                        properties.unshift(property);
+                    }
                 }
             });
             let codeToInject = listDisplay(selectedClassName, properties.toString().split(',').join('", "'));
